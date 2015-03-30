@@ -1,0 +1,7 @@
+#!/bin/sh
+if [ "x$1" = "x" ]; then
+  echo "Usage: $0 <server-ip>"
+  exit 1
+fi
+OPT=raw,echo=0,onlcr=0,echoctl=0,echoke=0,echoe=0,iexten=0
+exec socat -d -d pty,link=$HOME/grbl-serial,$OPT tcp:$1:5000

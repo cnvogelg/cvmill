@@ -1,0 +1,3 @@
+#!/bin/sh
+OPT=raw,echo=0,onlcr=0,echoctl=0,echoke=0,echoe=0,iexten=0
+exec socat -d -d tcp-l:5000,reuseaddr,fork file:/dev/ttyUSB0,nonblock,b115200,$OPT
