@@ -27,15 +27,16 @@ class SerPort(port.Port):
     
   def _read_ready(self, timeout):
     """can we read a line with read_line()?"""
-    if timeout is None:
-      return self.ser.inWaiting() > 0
-    else:
+    if self.ser.inWaiting() > 0:
+      return True
+    if timeout is not None:
       t = time.time()
       e = t + timeout
       while time.time() <= e:
         if self.ser.inWaiting() > 0:
           return True
         time.sleep(0.1)
+    return False
   
   def _read(self):
     return self.ser.read(self.ser.inWaiting()).decode("utf-8")
