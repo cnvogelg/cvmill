@@ -7,7 +7,7 @@ import port
 class SerPort(port.Port):
   """connect to Grbl host via serial port"""
   def __init__(self, dev, baud=115200, timeout=1, eol="\r\n"):
-    port.Port.__init__(self, timeout, eol)
+    port.Port.__init__(self, eol)
     self.dev = dev
     self.baud = baud
     self.ser = serial.Serial()

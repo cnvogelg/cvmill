@@ -6,18 +6,19 @@ import port
 
 class TcpPort(port.Port):
   """connect the Grbl host via a socat TCP pipe"""
-  def __init__(self, hostname, hostport=5000, timeout=1, eol="\r\n"):
-    port.Port.__init__(self, timeout, eol)
+  def __init__(self, hostname, hostport=5000, eol="\r\n"):
+    port.Port.__init__(self, eol)
     self.hostname = hostname
     self.hostport = hostport
-    self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    self._socket.settimeout(1)
   
   def open(self):
+    self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    self._socket.settimeout(1)
     self._socket.connect((self.hostname, self.hostport))
-  
+
   def close(self):
     self._socket.shutdown(socket.SHUT_RDWR)
+    self._socket.close()
     self._socket = None
     
   def write(self, buf):

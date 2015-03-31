@@ -2,8 +2,7 @@ import time
 
 class Port(object):
   """base class for all ports"""
-  def __init__(self, timeout=1, eol="\r\n"):
-    self.timeout = timeout
+  def __init__(self, eol="\r\n"):
     self.eol = eol
     self.last_read = ""
 
@@ -28,7 +27,7 @@ class Port(object):
   def canReadLine(self, timeout=None):
     return len(self.last_read) > 0 or self._readReady(timeout)
 
-  def readLine(self):
+  def readLine(self, timeout=None):
     """try to read a line until "\r\n" is received.
        block until something is read or return None on timeout"""
     # pre-fill buffer
@@ -42,9 +41,12 @@ class Port(object):
       while True:
         t = time.time()
         d = t - start
-        if d >= self.timeout:
-          break
-        w = self.timeout - d
+        if timeout is not None:
+          if d >= timeout:
+            break
+          w = timeout - d
+        else:
+          w = 0.1
         if self._readReady(w):
           data = self._read()
           if data is None or len(data) == 0:
@@ -58,10 +60,16 @@ class Port(object):
           time.sleep(0.1)
   
     # get first line in buf
-    line = buf[0:pos]
-    pos += len(self.eol)
-    self.last_read = buf[pos:]
-    return line
+    pos = buf.find(self.eol)
+    if pos >= 0:
+      line = buf[0:pos]
+      pos += len(self.eol)
+      self.last_read = buf[pos:]
+      return line
+    else:
+      self.last_read = buf
+      return None
+
 
 class PortTest(object):
   def __init__(self, port):
