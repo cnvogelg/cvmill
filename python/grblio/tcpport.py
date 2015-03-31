@@ -24,7 +24,7 @@ class TcpPort(port.Port):
   def write(self, buf):
     self._socket.sendall(buf.encode("utf-8"))
   
-  def _readReady(self, timeout):
+  def _read_ready(self, timeout):
     no = self._socket.fileno()
     res = select.select([no],[],[],timeout)
     ready = len(res[0]) > 0

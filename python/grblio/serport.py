@@ -25,8 +25,8 @@ class SerPort(port.Port):
     """send a string as raw"""
     self.ser.write(buf.encode("utf-8"))
     
-  def _readReady(self, timeout):
-    """can we read a line with readLine()?"""
+  def _read_ready(self, timeout):
+    """can we read a line with read_line()?"""
     if timeout is None:
       return self.ser.inWaiting() > 0
     else:

@@ -15,19 +15,16 @@ class Port(object):
   def write(self, buf):
     raise
   
-  def canReadLine(self):
-    raise
-
-  def _readReady(self, timeout):
+  def _read_ready(self, timeout):
     raise
 
   def _read(self):
     raise
 
-  def canReadLine(self, timeout=None):
-    return len(self.last_read) > 0 or self._readReady(timeout)
+  def can_read_line(self, timeout=None):
+    return len(self.last_read) > 0 or self._read_ready(timeout)
 
-  def readLine(self, timeout=None):
+  def read_line(self, timeout=None):
     """try to read a line until "\r\n" is received.
        block until something is read or return None on timeout"""
     # pre-fill buffer
@@ -47,7 +44,7 @@ class Port(object):
           w = timeout - d
         else:
           w = 0.1
-        if self._readReady(w):
+        if self._read_ready(w):
           data = self._read()
           if data is None or len(data) == 0:
             break
@@ -82,10 +79,10 @@ class PortTest(object):
     print("sending reset")
     sp.write("\x18") # ctrl-x
     print("wait for line")
-    sp.canReadLine()
+    sp.can_read_line()
     print("reading")
-    while sp.canReadLine(1):
-      l = sp.readLine()
+    while sp.can_read_line(1):
+      l = sp.read_line()
       if l is not None:
         print("line:",len(l),l)
       else:

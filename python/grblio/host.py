@@ -140,12 +140,12 @@ class GrblHost:
       
   def _wait_reset(self):
     """wait for reset in Grbl"""
-    line = self.port.readLine(timeout=2)      
+    line = self.port.read_line(timeout=2)      
     if line is None:
       raise GrblHostError("reset failed!")
     # skip empty line
     if line == "":
-      line = self.port.readLine(timeout=2)
+      line = self.port.read_line(timeout=2)
     m = re.search("^Grbl (\d)\.(\d)(.)", line)
     if m is None:
       raise GrblHostError("no hello after reset: "+line)
@@ -212,7 +212,7 @@ class GrblHost:
 
   def can_read_event(self, timeout=None):
     """poll if an event is ready to be read"""
-    return self.port.canReadLine(timeout)
+    return self.port.can_read_line(timeout)
 
   def read_event(self, timeout=None):
     """read the next line of grbl output and parse it
@@ -221,7 +221,7 @@ class GrblHost:
     # ignore empty lines
     line = ""
     while line == "":
-      line = self.port.readLine(timeout)
+      line = self.port.read_line(timeout)
       if line is None:
         return None
     # parse line
