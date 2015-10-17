@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "grbl-term: press Ctrl-A then Ctrl-X to leave!"
+picocom -b 115200 -c /dev/ttyACM0

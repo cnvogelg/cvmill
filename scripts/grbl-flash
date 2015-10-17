@@ -1,0 +1,7 @@
+#!/bin/bash
+FILE="$1"
+if [ "$FILE" = "" ]; then
+  echo "Please give 'grbl.hex' file!"
+  exit 1
+fi
+exec avrdude -pm328p -carduino -P/dev/ttyACM0 -D -Uflash:w:$FILE
